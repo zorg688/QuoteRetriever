@@ -53,7 +53,7 @@ pydeck==0.9.2
 Pygments==2.20.0
 python-dateutil==2.9.0.post0
 python-multipart==0.0.27
-pywin32==311
+pywin32==311; sys_platform == "win32
 PyYAML==6.0.3
 qdrant-client==1.17.1
 referencing==0.37.0
