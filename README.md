@@ -1,6 +1,6 @@
 # QuoteRetriever
 
-A vector search-based retriever of quotes from movies, tv shows, authors and comedians. Uses Qdrant for storing and embedding via fastembed. The app uses a streamlit UI for easy interaction in a web window
+A vector search-based retriever of quotes from movies, tv shows, authors and comedians. Uses Qdrant for storing and embedding via fastembed. The app uses a streamlit UI for easy interaction in a web window. The project was built without the involvement of AI, except for in the setup.bat file.
 
 This project was created while working under Metacore Games Oy and is a personal learning project with the goal to understand RAG pipelinesas well as interaction with the database
 

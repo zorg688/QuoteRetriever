@@ -16,9 +16,13 @@ if "visibility" not in st.session_state:
     st.session_state.placeholder = "A quote about inner strength"
 
 
-@st.cache_data
+
 def get_domains():
-    return infer.get_unique_types()
+
+    domains = infer.get_unique_types()
+
+    domains.append("surprise me")
+    return domains
 
 def get_quote_from_database(query, domain):
 

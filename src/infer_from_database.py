@@ -19,8 +19,6 @@ def get_unique_types():
         key = "type"
     )
 
-    print(types)
-
     return [element.value for element in types.hits]
 
 
@@ -32,7 +30,7 @@ def get_quote(query, domain = None):
 
     model_name = "BAAI/bge-small-en-v1.5"
 
-    if domain is not None and domain != "surprise me":
+    if domain in get_unique_types():
         filter = models.Filter(
             must=[
                 models.FieldCondition(
