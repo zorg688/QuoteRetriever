@@ -9,9 +9,17 @@ services:
 
   app:
     build: .
-    ports:
-      - "8501:8501"
+    expose:
+      - "8501"
     environment:
       - QDRANT_URL=http://qdrant:6333
     depends_on:
       - qdrant
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+    command: caddy reverse-proxy --from :80 --to app:8501
+    depends_on:
+      - app
