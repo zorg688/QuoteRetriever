@@ -8,9 +8,13 @@ import json
 
 import random
 
+import os
+
+QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+
 
 def get_unique_types():
-    client = QdrantClient(url="http://localhost:6333")
+    client = QdrantClient(url=QDRANT_URL)
 
     collection_name = "quotes"
 
@@ -24,7 +28,7 @@ def get_unique_types():
 
 def get_quote(query, domain = None):
 
-    client = QdrantClient(url="http://localhost:6333")
+    client = QdrantClient(url=QDRANT_URL)
 
     collection_name = "quotes"
 

@@ -1,0 +1,8 @@
+.ragsystem/
+database/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.dockerignore
+setup.bat

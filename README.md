@@ -7,9 +7,31 @@ This project was created while working under Metacore Games Oy and is a personal
 ## Prerequisites
 
 - [Docker](https://www.docker.com/get-started/) installed and running
-- Python 3.12+
+- Python 3.12+ (only needed for local development)
 
-## Quick setup (Windows)
+## Docker Compose (recommended)
+
+Runs both Qdrant and the Streamlit app in containers. The app is accessible to anyone on your local network.
+
+```bash
+docker compose up --build
+```
+
+The app will be available at `http://localhost:8501`. Other devices on the same network can reach it at `http://<your-ip>:8501`.
+
+To run in the background:
+
+```bash
+docker compose up --build -d
+```
+
+To stop:
+
+```bash
+docker compose down
+```
+
+## Quick setup for local development (Windows)
 
 Run the setup script to check prerequisites, create the venv, start Qdrant, and initialize the database in one step:
 
@@ -78,11 +100,13 @@ python infer_from_database.py
 
 ```
 .
-├── setup.bat               # Automated setup script (Windows)
+├── Dockerfile              # App container image
+├── docker-compose.yml      # Orchestrates app + Qdrant containers
+├── setup.bat               # Automated local setup script (Windows)
 ├── app.py                  # Streamlit web interface
 ├── data_raw/
 │   └── quotes.json         # Raw quote data (movie, tv show, author, philosopher, anime)
-├── database/               # Qdrant storage (if using volume mount)
+├── database/               # Qdrant storage (Docker volume mount)
 └── src/
     ├── update_database.py  # Database initialization and payload updates
     └── infer_from_database.py  # Query and retrieval logic
@@ -90,6 +114,6 @@ python infer_from_database.py
 
 ## Notes
 
-- Qdrant **must** be running via Docker before starting the app or running any scripts. All code connects to `http://localhost:6333`.
+- Qdrant **must** be running via Docker before starting the app or running any scripts. The Qdrant URL defaults to `http://localhost:6333` and can be overridden with the `QDRANT_URL` environment variable (set automatically by Docker Compose).
 - The embedding model used is `BAAI/bge-small-en-v1.5` (downloaded automatically by fastembed on first use).
 - If you need to recreate the collection, stop the container and remove the volume, then re-run `update_database.py`.

@@ -6,6 +6,10 @@ import numpy as np
 
 import json
 
+import os
+
+QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+
 def initialise_database(client, collection_name):
     model_name = "BAAI/bge-small-en-v1.5"
     
@@ -63,7 +67,7 @@ def update_payloads(client, collection_name):
 
 if __name__ == "__main__":
 
-    client = QdrantClient(url="http://localhost:6333")
+    client = QdrantClient(url=QDRANT_URL)
 
     
 
