@@ -1,0 +1,60 @@
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+from src import infer_from_database as infer
+
+st.title("Quote Retriever")
+
+st.session_state.visibility = "visible"
+st.session_state.disabled = False
+st.session_state.placeholder = "A quote about inner strength"
+
+if "visibility" not in st.session_state:
+    st.session_state.visibility = "visible"
+    st.session_state.disabled = False
+    st.session_state.placeholder = "A quote about inner strength"
+
+
+@st.cache_data
+def get_domains():
+    return infer.get_unique_types()
+
+def get_quote_from_database(query, domain):
+
+    quote = infer.get_quote(query, domain)
+
+    return quote
+
+
+
+query = st.text_input(
+    r"$\textsf{\small What kind of quote would you like today? Comedic, movie or philosophical quotes? }$",
+    label_visibility=st.session_state.visibility,
+    disabled=st.session_state.disabled,
+    placeholder=st.session_state.placeholder,
+)
+
+domain = st.radio(
+    "What type of quote would you like to receive?",
+    get_domains(),
+    index = None
+)
+
+if st.button("Run query", type= "primary"):
+
+    quote_get_state = st.spinner("Awaiting query...")
+
+    quote = get_quote_from_database(query, domain)
+
+    quote_final_state = st.spinner("Received quote")
+
+    try:
+        st.header(f"Your quote from the {quote.payload["type"]} domain:")
+        st.subheader(quote.payload["quote"]) 
+
+        source_text = r"$\textsf{\Large" +" - from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",") + "}$"
+        st.write(source_text)
+    except:
+        st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
+
