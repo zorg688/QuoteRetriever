@@ -69,8 +69,6 @@ if __name__ == "__main__":
 
     client = QdrantClient(url=QDRANT_URL)
 
-    
-
     collection_name = "quotes"
 
     if client.collection_exists(collection_name=collection_name) == False:
@@ -79,4 +77,4 @@ if __name__ == "__main__":
     else:
         print("collection already exists, updating database...")
 
-        update_payloads(client, collection_name)
+        #update_payloads(client, collection_name)

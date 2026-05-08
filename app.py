@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+
 from src import infer_from_database as infer
 
 st.title("Quote Retriever")
@@ -45,7 +46,9 @@ domain = st.radio(
     index = None
 )
 
-if st.button("Run query", type= "primary"):
+col1, col2 = st.columns(2)
+
+if col1.button("Run query", type= "primary"):
 
     quote_get_state = st.spinner("Awaiting query...")
 
@@ -57,8 +60,24 @@ if st.button("Run query", type= "primary"):
         st.header(f"Your quote from the {quote.payload["type"]} domain:")
         st.subheader(quote.payload["quote"]) 
 
-        source_text = r"$\textsf{\Large" +" - from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",") + "}$"
-        st.write(source_text)
+        source_text = "- from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",")
+        st.write(r"$\textsf{\Large" + source_text.title()+ "}$")
     except:
         st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
+if col2.button("I am feeling lucky", icon ="🎲"):
+    quote_get_state = st.spinner("Awaiting ranedom query...")
+
+    quote = get_quote_from_database(None, None)
+    
+    quote_final_state = st.spinner("Received quote")
+
+    try:
+        st.header(f"Your quote from the {quote.payload["type"]} domain:")
+        st.subheader(quote.payload["quote"]) 
+
+        source_text = "- from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",")
+        st.write(r"$\textsf{\Large" + source_text.title()+ "}$")
+    except:
+        st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
+
 
