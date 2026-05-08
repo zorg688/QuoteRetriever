@@ -8,29 +8,34 @@ import os
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 
 
-def get_unique_types():
+def get_unique_types(collection_name):
     client = QdrantClient(url=QDRANT_URL)
 
-    collection_name = "quotes"
 
-    types = client.facet(
-        collection_name = collection_name,
-        key = "type"
-    )
+    if collection_name == "quotes":
+        types = client.facet(
+            collection_name = collection_name,
+            key = "type"
+        )
+    elif collection_name == "steam_games":
+        types = client.facet(
+            collection_name = collection_name,
+            key = "genres"
+        )
 
     return [element.value for element in types.hits]
 
 
-def get_quote(user_query, domain = None):
+def get_result(user_query, collection_name, domain = None):
 
     client = QdrantClient(url=QDRANT_URL)
 
-    collection_name = "quotes"
+
 
     model_name = "BAAI/bge-small-en-v1.5"
 
 
-    if domain in get_unique_types():
+    if domain in get_unique_types(collection_name=collection_name):
         filter = models.Filter(
             must=[
                 models.FieldCondition(
@@ -47,7 +52,7 @@ def get_quote(user_query, domain = None):
     if user_query is None:
         user_query = np.random.randn(client.get_embedding_size(model_name))
     else:
-        user_query = models.Document(text=query, model=model_name)
+        user_query = models.Document(text=user_query, model=model_name)
 
 
     search_result = client.query_points(
