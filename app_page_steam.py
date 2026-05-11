@@ -70,6 +70,7 @@ if col2.button("I am feeling lucky", icon ="🎲"):
 
         st.header("Your game of the type" + ",".join(game.payload["genres"]) + ":")
         st.subheader(game.payload["name"]) 
+        st.write(game.payload["short_description"])
 
         #source_text = "- from the " + game.payload["type"] + " " + game.payload["source"].strip(",")
         #st.write(r"$\textsf{\Large" + source_text.title()+ "}$")

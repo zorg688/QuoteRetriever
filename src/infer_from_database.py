@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
     #domain = input(f"What type of quote would you like? We have quotes from {domains}\nEnter your query here and press 'Enter': ")
     domain = None
-    quote = get_quote(query, domain)
+    quote = get_result(query, domain)
 
     print(quote.payload["quote"])
     print(quote.payload["source"].strip(",").title())
