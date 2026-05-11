@@ -7,19 +7,55 @@ services:
     volumes:
       - ./database:/qdrant/storage
 
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama-pull:
+    image: ollama/ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    command: pull gemma4:e4b
+    depends_on:
+      ollama:
+        condition: service_healthy
+
   app:
     build: .
     expose:
       - "8501"
     environment:
       - QDRANT_URL=http://qdrant:6333
+      - OLLAMA_HOST=http://ollama:11434
     depends_on:
-      - qdrant
+      qdrant:
+        condition: service_started
+      ollama-pull:
+        condition: service_completed_successfully
 
   caddy:
     image: caddy:2
     ports:
       - "80:80"
-    command: caddy reverse-proxy --from :80 --to app:8501
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
     depends_on:
       - app
+
+volumes:
+  ollama_models:

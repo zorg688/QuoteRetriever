@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 
 
@@ -30,6 +31,17 @@ def get_quote_from_database(query, domain):
 
     return quote
 
+def print_answer(quotes):
+    quote = random.choice(quotes)
+
+    try:
+        st.header(f"Your quote from the {quote.payload["type"]} domain:")
+        st.subheader(quote.payload["quote"]) 
+
+        source_text = "- from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",")
+        st.write(r"$\textsf{\Large" + source_text.title()+ "}$")
+    except:
+        st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
 
 
 query = st.text_input(
@@ -51,32 +63,20 @@ if col1.button("Run query", type= "primary"):
 
     quote_get_state = st.spinner("Awaiting query...")
 
-    quote = get_quote_from_database(query, domain)
+    quotes = get_quote_from_database(query, domain)
 
     quote_final_state = st.spinner("Received quote")
 
-    try:
-        st.header(f"Your quote from the {quote.payload["type"]} domain:")
-        st.subheader(quote.payload["quote"]) 
+    print_answer(quotes)
 
-        source_text = "- from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",")
-        st.write(r"$\textsf{\Large" + source_text.title()+ "}$")
-    except:
-        st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
 if col2.button("I am feeling lucky", icon ="🎲"):
     quote_get_state = st.spinner("Awaiting random query...")
 
-    quote = get_quote_from_database(None, None)
+    quotes = get_quote_from_database(None, None)
     
     quote_final_state = st.spinner("Received quote")
 
-    try:
-        st.header(f"Your quote from the {quote.payload["type"]} domain:")
-        st.subheader(quote.payload["quote"]) 
+    print_answer(quotes)
 
-        source_text = "- from the " + quote.payload["type"] + " " + quote.payload["source"].strip(",")
-        st.write(r"$\textsf{\Large" + source_text.title()+ "}$")
-    except:
-        st.header(f"Sorry, but there is no quote for your question from the domain {domain}")
 
 

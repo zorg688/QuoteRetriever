@@ -30,13 +30,9 @@ def get_result(user_query, collection_name, domain = None):
 
     client = QdrantClient(url=QDRANT_URL)
 
-
-
     model_name = "BAAI/bge-small-en-v1.5"
 
-
     if domain in get_unique_types(collection_name=collection_name):
-
         result_domain = "type" if domain == "quotes" else "genres"
         filter = models.Filter(
             must=[
@@ -64,10 +60,9 @@ def get_result(user_query, collection_name, domain = None):
         timeout = 30
     ).points
 
-    print(search_result)
 
     if search_result:
-        return random.choice(search_result)
+        return search_result
     else:
         return None
 

@@ -49,6 +49,7 @@ def initialise_database(client, collection_name, file_name):
             ("windows", models.PayloadSchemaType.BOOL),
             ("mac", models.PayloadSchemaType.BOOL),
             ("linux", models.PayloadSchemaType.BOOL),
+            ("estimated_owners", models.PayloadSchemaType.INTEGER)
         ]
     else:
         index_names = None
@@ -96,12 +97,12 @@ def update_payloads(client, collection_name):
             ),
         ],
     ),
-)
+    )
+
 
 def scan_drive():
 
     files = os.listdir(DATA_PATH)
-
     return [file for file in files if file.endswith(".json")]
 
 

@@ -11,4 +11,5 @@ EXPOSE 8501
 
 # Initialize the database (skips if collection already exists), then start the app
 CMD cd src && python update_database.py && cd .. && \
-    streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+    streamlit run app.py --server.address=0.0.0.0 --server.port=8501 \
+    --server.headless=true

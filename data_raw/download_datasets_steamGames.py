@@ -17,36 +17,41 @@ def calculate_review_score(row):
     
     return score
 
+def calculate_minimum_owners(row):
+    
+    owner_range = row["estimated_owners"].split(" - ")
+
+    return int(owner_range[0])
+
 
 
 
 if os.path.exists(FILE_NAME):
     print("Data is already saved! Loading data...\n")
     steam_games = pd.read_json(FILE_NAME)
+
+    print(steam_games.shape[0])
 else:
     print("Data does not exist yet, downloading data...")
     steam_games = pd.read_parquet("hf://datasets/FronkonGames/steam-games-dataset/data/train-00000-of-00001.parquet")
 
+    steam_games["review_score"] = steam_games.apply(calculate_review_score, axis=1)
+    steam_games["estimated_owners"] = steam_games.apply(calculate_minimum_owners, axis = 1)
 
+    steam_games = steam_games[steam_games.estimated_owners !=0]
 
-steam_games["review_score"] = steam_games.apply(calculate_review_score, axis=1)
+    columns_to_keep = {"name", "price", "detailed_description", "short_description", "supported_languages", "windows", "mac", "linux", "metacritic_score", "user_score", "review_score", "developers", "publishers", "genres", "categories", "estimated_owners"}
 
+    columns_to_delete = [set(steam_games.columns)-columns_to_keep]
 
+    if len(columns_to_delete) > 0:
+        for col in columns_to_delete:
+            steam_games.drop(col, axis = 1, inplace = True)
 
-columns_to_keep = {"name", "price", "detailed_description", "short_description", "supported_languages", "windows", "mac", "linux", "metacritic_score", "user_score", "review_score", "developers", "publishers", "genres", "categories"}
+    if len(set(steam_games.columns)-columns_to_keep) == 0:
+        print("successfully deleted unused cols!")
+    else:
+        print("delete not successful")
 
-columns_to_delete = [set(steam_games.columns)-columns_to_keep]
-
-if len(columns_to_delete) > 0:
-    for col in columns_to_delete:
-        steam_games.drop(col, axis = 1, inplace = True)
-
-if len(set(steam_games.columns)-columns_to_keep) == 0:
-    print("successfully deleted unused cols!")
-else:
-    print("delete not successful")
-
-
-
-steam_games.to_json(FILE_NAME, orient = "records", indent = 2)
-print("data saved!")
+    steam_games.to_json(FILE_NAME, orient = "records", indent = 2)
+    print("data saved!")
