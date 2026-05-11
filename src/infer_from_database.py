@@ -36,10 +36,12 @@ def get_result(user_query, collection_name, domain = None):
 
 
     if domain in get_unique_types(collection_name=collection_name):
+
+        result_domain = "type" if domain == "quotes" else "genres"
         filter = models.Filter(
             must=[
                 models.FieldCondition(
-                    key="type",
+                    key=result_domain,
                     match=models.MatchValue(
                         value=domain
                     )
@@ -58,8 +60,11 @@ def get_result(user_query, collection_name, domain = None):
     search_result = client.query_points(
         collection_name=collection_name,
         query=user_query,
-        query_filter = filter
+        query_filter = filter,
+        timeout = 30
     ).points
+
+    print(search_result)
 
     if search_result:
         return random.choice(search_result)
