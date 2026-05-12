@@ -36,6 +36,6 @@ for data in [movie_quotes, funny_quotes, philo_quotes]:
             data.drop(col, axis = 1, inplace = True)
     final_data = pd.concat([final_data, data])
 
-print(final_data)
+final_data["type"] = final_data["type"].replace("tv", "tv show")
 
 final_data.to_json("quotes.json", orient = "records", indent = 2)
