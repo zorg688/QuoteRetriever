@@ -35,15 +35,14 @@ def get_game_from_database(query, genre):
 
 def print_answer(games, domain):
 
-    for game in games:
-        print(game.payload["name"])
-        print(round(game.score*100, 2))
+
     
 
     try:
         game = random.choice(games)
         st.header("Your game of the type " + ",".join(game.payload["genres"]) + ":")
         st.subheader(game.payload["name"]) 
+        st.write(game.payload["detailed_description"])
     except:
         st.header(f"Sorry, but there is no game for your query. However, these migth still be interesting: ") 
 

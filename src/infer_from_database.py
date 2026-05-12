@@ -33,7 +33,7 @@ def get_result(user_query, collection_name, domain = None):
     model_name = "BAAI/bge-small-en-v1.5"
 
     if domain in get_unique_types(collection_name=collection_name):
-        result_domain = "type" if domain == "quotes" else "genres"
+        result_domain = "type" if collection_name == "quotes" else "genres"
         filter = models.Filter(
             must=[
                 models.FieldCondition(
