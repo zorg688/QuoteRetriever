@@ -1,4 +1,14 @@
-import pandas as pd
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pandas",
+#     "huggingface_hub",
+# ]
+# ///
+"""Download and merge movie, funny, and philosopher quote datasets from Hugging Face."""
+
+import pandas as pd  # type: ignore[import-not-found]
 
 movie_quotes = pd.read_csv("hf://datasets/ygorgeurts/movie-quotes/movie_quotes.csv")
 

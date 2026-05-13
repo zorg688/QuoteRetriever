@@ -6,9 +6,18 @@ import random
 import os
 
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+VECTOR_BACKEND = os.getenv("VECTOR_BACKEND", "qdrant").lower()
+
+
+def _use_s3_for(collection_name: str) -> bool:
+    return VECTOR_BACKEND == "s3vectors" and collection_name == "steam_games"
 
 
 def get_unique_types(collection_name):
+    if _use_s3_for(collection_name):
+        from . import s3vectors_backend
+        return s3vectors_backend.get_unique_types(collection_name)
+
     client = QdrantClient(url=QDRANT_URL)
 
 
@@ -27,6 +36,10 @@ def get_unique_types(collection_name):
 
 
 def get_result(user_query, collection_name, domain = None):
+
+    if _use_s3_for(collection_name):
+        from . import s3vectors_backend
+        return s3vectors_backend.get_result(user_query, collection_name, domain)
 
     client = QdrantClient(url=QDRANT_URL)
 
