@@ -1,12 +1,23 @@
-import pandas as pd
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pandas",
+#     "pyarrow",
+#     "huggingface_hub",
+# ]
+# ///
+"""Download and preprocess the Steam games dataset from Hugging Face."""
+
 import os
 
+import pandas as pd  # type: ignore[import-not-found]
 
 FILE_NAME = "steam_games.json"
 
 
 def calculate_review_score(row):
-    
+
     try:
         score = (row["positive"]/(row["positive"]+row["negative"]))*100
         score = round(score, 2)
@@ -14,11 +25,11 @@ def calculate_review_score(row):
     except Exception as error:
         print(error)
         score = 0
-    
+
     return score
 
 def calculate_minimum_owners(row):
-    
+
     owner_range = row["estimated_owners"].split(" - ")
 
     return int(owner_range[0])
