@@ -8,12 +8,17 @@ import numpy as np
 import os
 
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+VECTOR_BACKEND = os.getenv("VECTOR_BACKEND", "qdrant").lower()
+
+
+def _use_s3_for(collection_name: str) -> bool:
+    return VECTOR_BACKEND == "s3vectors" and collection_name == "steam_games"
 
 
 def get_unique_types(collection_name):
-    """
-    Helper function to retrieve the domains/genres of the objects in the database
-    """
+    if _use_s3_for(collection_name):
+        from . import s3vectors_backend
+        return s3vectors_backend.get_unique_types(collection_name)
 
     client = QdrantClient(url=QDRANT_URL)
 
@@ -33,11 +38,9 @@ def get_unique_types(collection_name):
 
 def get_result(user_query, collection_name, domain = None):
 
-    """
-    function that queries the database based on a query. 
-    Also generates a random embedding if the query text was empty, 
-    either because it was left empty or because the user used the 'I am feeling lucky' button
-    """
+    if _use_s3_for(collection_name):
+        from . import s3vectors_backend
+        return s3vectors_backend.get_result(user_query, collection_name, domain)
 
     client = QdrantClient(url=QDRANT_URL)
 

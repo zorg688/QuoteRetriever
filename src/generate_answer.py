@@ -31,8 +31,9 @@ def generate_answer(query, game):
     Context:
     {game_string}
 
-    Your answer must always start with 'This game is recommended for your query, because: ' and list the reasons as bullet points
-    
+    Your answer must always start with 'This game is recommended for your query, because: ' and list the reasons as bullet points.
+    Always write your answer in English, regardless of the language used in the context or game description.
+
     Double check that this form is adhered by before finalizing your answer
     """
 
