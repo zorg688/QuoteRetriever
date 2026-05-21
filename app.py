@@ -1,3 +1,7 @@
+"""
+Main Streamlit page that hosts the other two tools
+"""
+
 import streamlit as st
 
 pg = st.navigation([

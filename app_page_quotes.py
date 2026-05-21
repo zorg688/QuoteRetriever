@@ -1,3 +1,7 @@
+"""
+The Streamlit page for retrieving quotes from the QDrant database
+"""
+
 import streamlit as st
 import random
 
@@ -59,6 +63,9 @@ domain = st.radio(
 
 col1, col2 = st.columns(2)
 
+"""
+columns for the different buttons/functions that the tool offers
+"""
 if col1.button("Run query", type= "primary"):
 
     quote_get_state = st.spinner("Awaiting query...")

@@ -1,16 +1,21 @@
+"""
+Script for inference with the local database, either running separately or a docker cointainer.
+The script includes a main function used for debugging for empty query inputs
+"""
+
 from qdrant_client import QdrantClient, models
-import fastembed
 import numpy as np
-import json
-import random
 import os
 
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 
 
 def get_unique_types(collection_name):
-    client = QdrantClient(url=QDRANT_URL)
+    """
+    Helper function to retrieve the domains/genres of the objects in the database
+    """
 
+    client = QdrantClient(url=QDRANT_URL)
 
     if collection_name == "quotes":
         types = client.facet(
@@ -27,6 +32,12 @@ def get_unique_types(collection_name):
 
 
 def get_result(user_query, collection_name, domain = None):
+
+    """
+    function that queries the database based on a query. 
+    Also generates a random embedding if the query text was empty, 
+    either because it was left empty or because the user used the 'I am feeling lucky' button
+    """
 
     client = QdrantClient(url=QDRANT_URL)
 

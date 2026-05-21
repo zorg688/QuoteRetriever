@@ -1,8 +1,10 @@
+"""
+Helper script to visualize column contents in the quotes dataset, legcay script
+"""
+
 import json
 
 import pandas as pd
-
-
 
 
 with open("quotes.json", "r") as file:

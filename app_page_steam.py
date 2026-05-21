@@ -1,3 +1,8 @@
+"""
+The Streamlit page for retrieving steam game recommendations 
+as well as generating explanations why a game fits the query from the QDrant database and via Ollama local models
+"""
+
 import streamlit as st
 import random
 
@@ -35,9 +40,6 @@ def get_game_from_database(query, genre):
 
 def print_answer(games, domain):
 
-
-    
-
     try:
         game = random.choice(games)
         st.header("Your game of the type " + ",".join(game.payload["genres"]) + ":")
@@ -45,7 +47,6 @@ def print_answer(games, domain):
         st.write(game.payload["detailed_description"])
     except:
         st.header(f"Sorry, but there is no game for your query. However, these migth still be interesting: ") 
-
 
 
 

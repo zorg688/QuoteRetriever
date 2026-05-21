@@ -1,3 +1,7 @@
+"""
+Script for downloading the quotes datasets as well as preprocessing them to fit the proper setup and dropping unimportant columns
+"""
+
 import pandas as pd
 
 movie_quotes = pd.read_csv("hf://datasets/ygorgeurts/movie-quotes/movie_quotes.csv")

@@ -1,3 +1,8 @@
+"""
+Script that has to run at the beginning when the database container is first set up in order to populate it with the doanloaded datasets. 
+Requires the dataset scripts to be run beforehand
+"""
+
 from qdrant_client import QdrantClient, models
 
 import json
@@ -8,6 +13,10 @@ QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 DATA_PATH = "../data_raw"
 
 def generate_embeddings(collection_name, payload, model_name):
+    
+    """
+    function that generates embeddings for the database objects, can be expanded for new databases
+    """
 
     print("Embedding data...")
     
@@ -23,6 +32,11 @@ def generate_embeddings(collection_name, payload, model_name):
 
 
 def initialise_database(client, collection_name, file_name):
+    
+    """
+    Function that sets up the database with its indexed payload information and uploads the embedded data
+    """
+
     model_name = "BAAI/bge-small-en-v1.5"
     
     #load data
@@ -78,7 +92,12 @@ def initialise_database(client, collection_name, file_name):
         payload=payload,
     )
 
+
 def update_payloads(client, collection_name):
+    
+    """
+    Legacy function that was used to update the payload of the quotes database, the function is now moved to the database sdcript 'download_datasets_quotes.py'
+    """
 
     payload_to_update= "type"
     old_value = "tv"
@@ -101,6 +120,9 @@ def update_payloads(client, collection_name):
 
 
 def scan_drive():
+    """
+    Function that finds the required datasets
+    """
 
     files = os.listdir(DATA_PATH)
     return [file for file in files if file.endswith(".json")]
@@ -108,6 +130,10 @@ def scan_drive():
 
 
 if __name__ == "__main__":
+
+    """
+    main function that handles setting up the database
+    """
 
     files =scan_drive()
 

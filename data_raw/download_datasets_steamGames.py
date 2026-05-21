@@ -1,3 +1,7 @@
+"""
+Script for downloading the steam games datasets as well as preprocessing it to fit the proper setup and dropping unimportant columns
+"""
+
 import pandas as pd
 import os
 

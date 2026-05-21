@@ -1,3 +1,9 @@
+"""
+Script for generating the LLM answer locally with a specified model. 
+The model is loaded at startup of the container to reduce inference time
+This is so far only used for the steam game recommendation tool
+"""
+
 import os
 from ollama import Client
 
